@@ -1,5 +1,5 @@
 {
-	"name": "@emdash-cms/plugin-simple-history",
+	"name": "@masonjames/emdash-simple-history",
 	"version": "0.1.0",
 	"description": "Lightweight activity history for EmDash CMS content changes.",
 	"type": "module",
@@ -53,5 +53,8 @@
 		"url": "https://github.com/masonjames/emdash-simple-history/issues"
 	},
 	"homepage": "https://github.com/masonjames/emdash-simple-history",
-	"packageManager": "pnpm@10.28.0"
+	"packageManager": "pnpm@10.28.0",
+	"publishConfig": {
+		"access": "public"
+	}
 }

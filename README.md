@@ -1,4 +1,4 @@
-# @emdash-cms/plugin-simple-history
+# @masonjames/emdash-simple-history
 
 Simple History is a focused activity feed for EmDash CMS. It records content create, update, and delete events, then surfaces them in an admin history page and a dashboard widget so operators can quickly answer: **what changed, and roughly when?**
 
@@ -22,7 +22,7 @@ It is intentionally narrower than a compliance-grade audit product.
 ## Installation
 
 ```bash
-pnpm add @emdash-cms/plugin-simple-history
+pnpm add @masonjames/emdash-simple-history
 ```
 
 Register it in your EmDash config:
@@ -30,7 +30,7 @@ Register it in your EmDash config:
 ```ts
 import { defineConfig } from "astro/config";
 import { emdash } from "emdash/astro";
-import { simpleHistoryPlugin } from "@emdash-cms/plugin-simple-history";
+import { simpleHistoryPlugin } from "@masonjames/emdash-simple-history";
 
 export default defineConfig({
 	integrations: [
