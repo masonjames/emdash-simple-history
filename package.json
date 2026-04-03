@@ -1,0 +1,63 @@
+{
+	"name": "@emdash-cms/plugin-simple-history",
+	"version": "0.1.0",
+	"description": "Lightweight activity history for EmDash CMS content changes.",
+	"type": "module",
+	"main": "dist/index.mjs",
+	"exports": {
+		".": {
+			"import": "./dist/index.mjs",
+			"types": "./dist/index.d.mts"
+		},
+		"./sandbox": {
+			"import": "./dist/sandbox-entry.mjs",
+			"types": "./dist/sandbox-entry.d.mts"
+		}
+	},
+	"files": [
+		"dist",
+		"README.md",
+		"CHANGELOG.md",
+		"LICENSE"
+	],
+	"sideEffects": false,
+	"scripts": {
+		"build": "tsdown src/index.ts src/sandbox-entry.ts --format esm --dts --clean",
+		"dev": "tsdown src/index.ts src/sandbox-entry.ts --format esm --dts --watch",
+		"typecheck": "tsc --noEmit",
+		"test": "vitest run",
+		"check": "pnpm run typecheck && pnpm run test"
+	},
+	"keywords": [
+		"emdash",
+		"cms",
+		"plugin",
+		"history",
+		"audit",
+		"activity"
+	],
+	"author": "Mason James",
+	"license": "MIT",
+	"peerDependencies": {
+		"emdash": ">=0.1.0"
+	},
+	"dependencies": {
+		"ulidx": "^2.4.1",
+		"zod": "^4.3.5"
+	},
+	"devDependencies": {
+		"emdash": "^0.1.0",
+		"tsdown": "^0.20.3",
+		"typescript": "^5.9.3",
+		"vitest": "^4.0.18"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/masonjames/emdash-simple-history.git"
+	},
+	"bugs": {
+		"url": "https://github.com/masonjames/emdash-simple-history/issues"
+	},
+	"homepage": "https://github.com/masonjames/emdash-simple-history",
+	"packageManager": "pnpm@10.28.0"
+}
