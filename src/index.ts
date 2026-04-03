@@ -25,8 +25,6 @@ export function simpleHistoryPlugin(): PluginDescriptor {
 	};
 }
 
-export default simpleHistoryPlugin;
-
 export type {
 	ContentDeleteEvent,
 	ContentSaveEvent,

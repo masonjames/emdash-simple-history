@@ -3,19 +3,13 @@
 	"version": "0.1.0",
 	"description": "Lightweight activity history for EmDash CMS content changes.",
 	"type": "module",
-	"main": "dist/index.mjs",
+	"main": "src/index.ts",
 	"exports": {
-		".": {
-			"import": "./dist/index.mjs",
-			"types": "./dist/index.d.mts"
-		},
-		"./sandbox": {
-			"import": "./dist/sandbox-entry.mjs",
-			"types": "./dist/sandbox-entry.d.mts"
-		}
+		".": "./src/index.ts",
+		"./sandbox": "./src/sandbox-entry.ts"
 	},
 	"files": [
-		"dist",
+		"src",
 		"README.md",
 		"CHANGELOG.md",
 		"LICENSE"
