@@ -5,7 +5,7 @@ export function simpleHistoryPlugin(): PluginDescriptor {
 		id: "simple-history",
 		version: "0.1.0",
 		format: "standard",
-		entrypoint: "@masonjames/emdash-simple-history/sandbox",
+		entrypoint: "emdash-simple-history/sandbox",
 		capabilities: ["read:content"],
 		storage: {
 			entries: {

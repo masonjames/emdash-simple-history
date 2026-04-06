@@ -4,7 +4,7 @@ status: draft
 priority: P2
 inspired_by: "Simple History"
 plugin_id: "simple-history"
-package_name: "@masonjames/emdash-simple-history"
+package_name: "emdash-simple-history"
 execution_mode: "Standard plugin, sandbox-compatible target"
 ---
 

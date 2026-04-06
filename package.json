@@ -1,5 +1,5 @@
 {
-	"name": "@masonjames/emdash-simple-history",
+	"name": "emdash-simple-history",
 	"version": "0.1.0",
 	"description": "Lightweight activity history for EmDash CMS content changes.",
 	"type": "module",
