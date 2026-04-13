@@ -77,7 +77,7 @@ export const historySummaryRequestSchema = z.object({}).passthrough().default({}
 export const adminInteractionSchema = z.discriminatedUnion("type", [
 	z.object({
 		type: z.literal("page_load"),
-		page: z.union([z.literal("/history"), z.literal("widget:recent-activity")]),
+		page: z.union([z.literal("/history"), z.literal("/settings"), z.literal("widget:recent-activity")]),
 	}),
 	z.object({
 		type: z.literal("form_submit"),

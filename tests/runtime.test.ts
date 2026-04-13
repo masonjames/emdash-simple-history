@@ -127,6 +127,12 @@ describe("runtime plugin behavior", () => {
 		})) as { blocks: Array<Record<string, unknown>> };
 		expect(page.blocks.some((block) => block.type === "table")).toBe(true);
 
+		const settingsAliasPage = (await invokeStandardRoute(plugin, "admin", ctx, {
+			type: "page_load",
+			page: "/settings",
+		})) as { blocks: Array<Record<string, unknown>> };
+		expect(settingsAliasPage.blocks.some((block) => block.type === "table")).toBe(true);
+
 		const saveResult = (await invokeStandardRoute(plugin, "admin", ctx, {
 			type: "form_submit",
 			action_id: "history_save_settings",

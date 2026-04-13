@@ -3,7 +3,7 @@ import type { PluginDescriptor } from "emdash";
 export function simpleHistoryPlugin(): PluginDescriptor {
 	return {
 		id: "simple-history",
-		version: "0.1.1",
+		version: "0.1.2",
 		format: "standard",
 		entrypoint: "emdash-simple-history/sandbox",
 		capabilities: ["read:content"],

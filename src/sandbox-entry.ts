@@ -195,7 +195,7 @@ export default definePlugin({
 
 				try {
 					if (interaction.type === "page_load") {
-						if (interaction.page === "/history") {
+						if (interaction.page === "/history" || interaction.page === "/settings") {
 							return await renderHistoryPage(ctx);
 						}
 

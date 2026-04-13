@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.2
+
+- Added admin route support for `/settings` as an alias to the existing `/history` page to prevent settings-page load failures in host admin UIs.
+
 ## 0.1.1
 
 - Added package-level plugin identity metadata and explicit no-network manifest metadata for marketplace trust review.
