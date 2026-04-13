@@ -234,7 +234,7 @@ export function createTestPluginContext(initialKv: Record<string, unknown> = {})
 	};
 
 	const ctx = {
-		plugin: { id: "simple-history", version: "0.1.0" },
+		plugin: { id: "simple-history", version: "0.1.1" },
 		storage: { entries },
 		kv,
 		log: {

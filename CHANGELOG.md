@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.1
+
+- Added package-level plugin identity metadata and explicit no-network manifest metadata for marketplace trust review.
+
 ## 0.1.0
 
 - Initial release of EmDash Simple History

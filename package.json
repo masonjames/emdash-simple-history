@@ -1,6 +1,6 @@
 {
 	"name": "emdash-simple-history",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "Lightweight activity history for EmDash CMS content changes.",
 	"type": "module",
 	"main": "src/index.ts",
@@ -56,5 +56,8 @@
 	"packageManager": "pnpm@10.28.0",
 	"publishConfig": {
 		"access": "public"
+	},
+	"plugin": {
+		"id": "simple-history"
 	}
 }

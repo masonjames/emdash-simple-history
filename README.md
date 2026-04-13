@@ -119,7 +119,7 @@ This package is structured for EmDash's plugin bundling flow:
 ```bash
 pnpm build
 emdash plugin bundle
-emdash plugin publish --tarball dist/simple-history-0.1.0.tar.gz
+emdash plugin publish --tarball dist/simple-history-0.1.1.tar.gz
 ```
 
 ## Development

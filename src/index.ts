@@ -3,10 +3,11 @@ import type { PluginDescriptor } from "emdash";
 export function simpleHistoryPlugin(): PluginDescriptor {
 	return {
 		id: "simple-history",
-		version: "0.1.0",
+		version: "0.1.1",
 		format: "standard",
 		entrypoint: "emdash-simple-history/sandbox",
 		capabilities: ["read:content"],
+		allowedHosts: [],
 		storage: {
 			entries: {
 				// Composite indexes are supported by EmDash runtime storage/manifest handling,
