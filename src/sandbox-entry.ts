@@ -1,4 +1,4 @@
-import { definePlugin, PluginRouteError } from "emdash";
+import { PluginRouteError } from "emdash";
 import type { PluginContext } from "emdash";
 
 import { buildHistoryPageBlocks, buildRecentActivityWidgetBlocks, decodePaginationState } from "./admin-blocks.js";
@@ -113,7 +113,10 @@ async function renderWidget(ctx: PluginContext, errorMessage?: string): Promise<
 	});
 }
 
-export default definePlugin({
+// emdash "standard"-format plugins default-export a bare { hooks, routes }
+// object; identity (id, version) is injected from the PluginDescriptor by
+// adaptSandboxEntry. Wrapping this in definePlugin() throws on emdash >= 0.17.
+export default {
 	hooks: {
 		"plugin:install": async (_event: unknown, ctx: PluginContext) => {
 			await seedDefaultSettings(ctx);
@@ -261,4 +264,4 @@ export default definePlugin({
 			},
 		},
 	},
-});
+};
