@@ -1,6 +1,5 @@
 import type { PluginContext, StorageCollection } from "emdash";
 import { z } from "zod";
-import { ulid } from "ulidx";
 
 import type {
 	ContentDeleteEvent,
@@ -384,7 +383,7 @@ export function serializeTrackedCollections(trackedCollections: string[]): strin
 export function buildEntryFromAfterSave(
 	event: ContentSaveEvent,
 	now: Date = new Date(),
-	idFactory: () => string = ulid,
+	idFactory: () => string = () => crypto.randomUUID(),
 ): PersistableEntry | null {
 	const resourceId = toResourceId(event.content.id);
 	if (!resourceId) return null;
@@ -405,7 +404,7 @@ export function buildEntryFromAfterSave(
 export function buildEntryFromAfterDelete(
 	event: ContentDeleteEvent,
 	now: Date = new Date(),
-	idFactory: () => string = ulid,
+	idFactory: () => string = () => crypto.randomUUID(),
 ): PersistableEntry | null {
 	const resourceId = toResourceId(event.id);
 	if (!resourceId) return null;

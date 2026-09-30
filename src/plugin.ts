@@ -1,5 +1,5 @@
-import { PluginRouteError } from "emdash";
-import type { PluginContext } from "emdash";
+import { pluginResponse } from "emdash/plugin";
+import type { PluginContext, SandboxedPlugin } from "emdash/plugin";
 
 import { buildHistoryPageBlocks, buildRecentActivityWidgetBlocks, decodePaginationState } from "./admin-blocks.js";
 import {
@@ -20,8 +20,7 @@ import {
 	shouldTrackCollection,
 	WIDGET_PAGE_SIZE,
 } from "./history.js";
-import type { AdminInteraction, HistoryListRouteInput, HistorySummaryRouteInput } from "./history.js";
-import type { BlockResponse, ContentDeleteEvent, ContentSaveEvent, HistoryListRequest } from "./types.js";
+import type { BlockResponse, HistoryListRequest } from "./types.js";
 
 function getSafeErrorMessage(error: unknown, fallback: string): string {
 	if (error instanceof HistoryValidationError) return error.message;
@@ -113,10 +112,15 @@ async function renderWidget(ctx: PluginContext, errorMessage?: string): Promise<
 	});
 }
 
-// emdash "standard"-format plugins default-export a bare { hooks, routes }
-// object; identity (id, version) is injected from the PluginDescriptor by
-// adaptSandboxEntry. Wrapping this in definePlugin() throws on emdash >= 0.17.
-export default {
+function jsonResponse(status: number, value: unknown) {
+	return pluginResponse({
+		status,
+		headers: { "content-type": "application/json" },
+		body: { kind: "text", value: JSON.stringify(value) },
+	});
+}
+
+const plugin: SandboxedPlugin = {
 	hooks: {
 		"plugin:install": async (_event: unknown, ctx: PluginContext) => {
 			await seedDefaultSettings(ctx);
@@ -129,7 +133,7 @@ export default {
 		"content:afterSave": {
 			timeout: 2000,
 			errorPolicy: "continue",
-			handler: async (event: ContentSaveEvent, ctx: PluginContext) => {
+			handler: async (event, ctx) => {
 				const settings = await loadSettings(ctx);
 				if (!shouldTrackCollection(event.collection, settings.trackedCollections)) {
 					return;
@@ -151,7 +155,7 @@ export default {
 		"content:afterDelete": {
 			timeout: 2000,
 			errorPolicy: "continue",
-			handler: async (event: ContentDeleteEvent, ctx: PluginContext) => {
+			handler: async (event, ctx) => {
 				const settings = await loadSettings(ctx);
 				if (!shouldTrackCollection(event.collection, settings.trackedCollections)) {
 					return;
@@ -173,13 +177,18 @@ export default {
 	},
 	routes: {
 		"history/list": {
+			request: { body: "json" },
+			response: "raw",
+			methods: ["POST"],
 			input: historyListRequestSchema,
-			handler: async (routeCtx: { input: HistoryListRouteInput }, ctx: PluginContext) => {
+			handler: async (routeCtx, ctx) => {
 				try {
-					return await getHistoryList(ctx, routeCtx.input);
+					const parsed = historyListRequestSchema.safeParse(routeCtx.input);
+					if (!parsed.success) return jsonResponse(400, { success: false, error: { code: "BAD_REQUEST", message: parsed.error.message } });
+					return jsonResponse(200, { success: true, data: await getHistoryList(ctx, parsed.data) });
 				} catch (error) {
 					if (error instanceof HistoryValidationError) {
-						throw PluginRouteError.badRequest(error.message);
+						return jsonResponse(400, { success: false, error: { code: "BAD_REQUEST", message: error.message } });
 					}
 					throw error;
 				}
@@ -187,14 +196,14 @@ export default {
 		},
 		"history/summary": {
 			input: historySummaryRequestSchema,
-			handler: async (_routeCtx: { input: HistorySummaryRouteInput }, ctx: PluginContext) => {
+			handler: async (_routeCtx, ctx) => {
 				return getHistorySummary(ctx);
 			},
 		},
 		admin: {
 			input: adminInteractionSchema,
-			handler: async (routeCtx: { input: AdminInteraction }, ctx: PluginContext) => {
-				const interaction = routeCtx.input;
+			handler: async (routeCtx, ctx) => {
+				const interaction = adminInteractionSchema.parse(routeCtx.input);
 
 				try {
 					if (interaction.type === "page_load") {
@@ -265,3 +274,5 @@ export default {
 		},
 	},
 };
+
+export default plugin;

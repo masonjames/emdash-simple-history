@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import plugin from "../src/sandbox-entry.js";
+import plugin from "../src/plugin.js";
 import { getHistorySummary } from "../src/history.js";
 import { createTestPluginContext, invokeStandardHook, invokeStandardRoute } from "./helpers/fakes.js";
 
@@ -58,7 +58,7 @@ describe("runtime plugin behavior", () => {
 	});
 
 	it("lists paginated filtered history through the private route contract", async () => {
-		const { ctx, entries } = createTestPluginContext();
+		const { ctx, entries } = createTestPluginContext({ "settings:retentionDays": 0 });
 		await entries.putMany([
 			{
 				id: "a",

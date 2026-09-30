@@ -21,11 +21,16 @@ It is intentionally narrower than a compliance-grade audit product.
 
 ## Installation
 
+Requires EmDash 1.0.1 or later. Install **Simple History** by `@masonjames.com`
+from the [EmDash plugin registry](https://plugins.emdashcms.com). Your site must
+have a sandbox runner configured. Open Plugins → History after installation.
+There is no frontend package or theme change to make.
+
+Existing npm users can continue with:
+
 ```bash
 pnpm add emdash-simple-history
 ```
-
-Register it in your EmDash config:
 
 ```ts
 import { defineConfig } from "astro/config";
@@ -33,14 +38,19 @@ import { emdash } from "emdash/astro";
 import { simpleHistoryPlugin } from "emdash-simple-history";
 
 export default defineConfig({
-	integrations: [
-		emdash({
-			plugins: [simpleHistoryPlugin()],
-			// or sandboxed: [simpleHistoryPlugin()]
-		}),
-	],
+  integrations: [emdash({ plugins: [simpleHistoryPlugin()] })],
 });
 ```
+
+The npm factory remains supported. For isolated npm registration, configure your
+sandbox runner and use `sandboxed: [simpleHistoryPlugin()]`. Choose one install
+method; do not enable the npm and registry versions together. Existing npm
+history remains under `simple-history`; registry installations have a separate
+publisher-scoped identity and do not import that history automatically.
+
+The registry version requests `content:read` and no external network hosts.
+It stores history and settings in its own plugin storage and KV. Activity routes
+are private, so site visitors cannot read the feed.
 
 ## What it captures
 
@@ -112,24 +122,33 @@ Returns retained totals, rolling-window counts, known collections, and widget st
 
 > EmDash wraps successful plugin route responses in the normal `{ data: ... }` envelope.
 
-## Marketplace / bundling
-
-This package is structured for EmDash's plugin bundling flow:
+## Build, test, and release
 
 ```bash
-pnpm build
-emdash plugin bundle
-emdash plugin publish --tarball dist/simple-history-0.1.1.tar.gz
+pnpm install --frozen-lockfile
+pnpm check
 ```
 
-## Development
+`check` builds the self-contained runtime, typechecks, runs unit tests and a real
+EmDash sandbox integration test, and validates the registry bundle. The sandbox
+check covers content create/update/delete, persistence after restart, private
+routes, invalid filters, and Block Kit admin pages/widgets.
+
+The sandbox test approach follows EmDash's official `@emdash-cms/plugin-test`
+host, also used by [Charl Kruger's EmDash Forms](https://github.com/charl-kruger/emdash-forms).
+
+Publish the verified version after committing and pushing its source:
 
 ```bash
-pnpm install
-pnpm typecheck
-pnpm test
-pnpm build
+pnpm exec emdash-plugin login masonjames.com
+pnpm exec emdash-plugin publish
+pnpm publish --access public
 ```
+
+Publishing creates package and release records in the publisher's Atmosphere
+account. The catalog becomes visible after approval; follow the CLI's
+`emdash-plugin info … --version … --watch` command to check that state.
+The CLI is pinned to `0.13.1`. Published versions are immutable.
 
 ## Limitations
 
