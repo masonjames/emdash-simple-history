@@ -1,26 +1,36 @@
 {
 	"name": "emdash-simple-history",
-	"version": "0.1.2",
+	"version": "0.2.0",
 	"description": "Lightweight activity history for EmDash CMS content changes.",
 	"type": "module",
-	"main": "src/index.ts",
+	"main": "dist/compat/index.mjs",
 	"exports": {
-		".": "./src/index.ts",
-		"./sandbox": "./src/sandbox-entry.ts"
+		".": {
+			"types": "./dist/compat/index.d.mts",
+			"default": "./dist/compat/index.mjs"
+		},
+		"./sandbox": "./dist/plugin.mjs"
 	},
 	"files": [
-		"src",
+		"dist/*.mjs",
+		"dist/*.d.mts",
+		"dist/manifest.json",
+		"dist/compat",
+		"emdash-plugin.jsonc",
 		"README.md",
 		"CHANGELOG.md",
 		"LICENSE"
 	],
 	"sideEffects": false,
 	"scripts": {
-		"build": "tsdown src/index.ts src/sandbox-entry.ts --format esm --dts --clean",
-		"dev": "tsdown src/index.ts src/sandbox-entry.ts --format esm --dts --watch",
+		"build": "emdash-plugin build && tsdown src/index.ts --out-dir dist/compat --format esm --dts --clean",
+		"dev": "emdash-plugin dev",
 		"typecheck": "tsc --noEmit",
 		"test": "vitest run",
-		"check": "pnpm run typecheck && pnpm run test"
+		"check": "pnpm build && pnpm typecheck && pnpm test && pnpm test:sandbox && pnpm bundle",
+		"validate": "emdash-plugin validate",
+		"bundle": "emdash-plugin bundle",
+		"test:sandbox": "vitest run --config vitest.sandbox.config.ts"
 	},
 	"keywords": [
 		"emdash",
@@ -33,17 +43,20 @@
 	"author": "Mason James",
 	"license": "MIT",
 	"peerDependencies": {
-		"emdash": ">=0.1.0"
+		"emdash": ">=1.0.1"
 	},
 	"dependencies": {
-		"ulidx": "^2.4.1",
 		"zod": "^4.3.5"
 	},
 	"devDependencies": {
-		"emdash": "^0.1.0",
+		"emdash": "1.0.1",
 		"tsdown": "^0.20.3",
 		"typescript": "^5.9.3",
-		"vitest": "^4.0.18"
+		"vitest": "^4.0.18",
+		"@emdash-cms/plugin-cli": "0.13.1",
+		"@types/node": "^24.10.13",
+		"@emdash-cms/plugin-test": "0.2.6",
+		"vite": "^8.0.0"
 	},
 	"repository": {
 		"type": "git",
@@ -59,5 +72,6 @@
 	},
 	"plugin": {
 		"id": "simple-history"
-	}
+	},
+	"types": "dist/compat/index.d.mts"
 }

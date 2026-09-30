@@ -1,30 +1,11 @@
-import type { PluginDescriptor } from "emdash";
+import descriptor from "../dist/index.mjs";
 
-export function simpleHistoryPlugin(): PluginDescriptor {
-	return {
-		id: "simple-history",
-		version: "0.1.2",
-		format: "standard",
-		entrypoint: "emdash-simple-history/sandbox",
-		capabilities: ["read:content"],
-		allowedHosts: [],
-		storage: {
-			entries: {
-				// Composite indexes are supported by EmDash runtime storage/manifest handling,
-				// but the current PluginDescriptor typing still narrows this field to string[].
-				indexes: [
-					"timestamp",
-					"action",
-					"collection",
-					["collection", "timestamp"],
-					["action", "timestamp"],
-				] as unknown as string[],
-			},
-		},
-		adminPages: [{ path: "/history", label: "History", icon: "history" }],
-		adminWidgets: [{ id: "recent-activity", title: "Recent Activity", size: "half" }],
-	};
+// Keep the existing npm factory while using the CLI-generated descriptor.
+export function simpleHistoryPlugin() {
+	return descriptor;
 }
+
+export default descriptor;
 
 export type {
 	ContentDeleteEvent,

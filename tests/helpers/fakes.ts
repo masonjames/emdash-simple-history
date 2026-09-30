@@ -1,4 +1,4 @@
-import type { PluginContext, StorageCollection, StandardPluginDefinition } from "emdash";
+import type { PluginContext, SandboxedPlugin } from "emdash/plugin";
 
 import type { SimpleHistoryEntry } from "../../src/types.js";
 
@@ -114,7 +114,7 @@ export class InMemoryKV {
 	}
 }
 
-export class InMemoryStorage<T extends object> implements StorageCollection<T> {
+export class InMemoryStorage<T extends object> {
 	private readonly map = new Map<string, T>();
 	private readonly indexedFields: Set<string>;
 
@@ -249,7 +249,7 @@ export function createTestPluginContext(initialKv: Record<string, unknown> = {})
 }
 
 export async function invokeStandardRoute(
-	definition: StandardPluginDefinition,
+	definition: SandboxedPlugin,
 	routeName: string,
 	ctx: PluginContext,
 	body?: unknown,
@@ -259,7 +259,7 @@ export async function invokeStandardRoute(
 		| undefined;
 	if (!route) throw new Error(`Unknown route ${routeName}`);
 	const input = route.input ? route.input.parse(body) : body;
-	return route.handler(
+	const result = await route.handler(
 		{
 			input,
 			request: new Request(`http://example.test/${routeName}`, { method: "POST" }),
@@ -267,15 +267,23 @@ export async function invokeStandardRoute(
 		},
 		ctx,
 	);
+	if (isRecord(result) && result.__emdashPluginResponse === true && isRecord(result.body) && typeof result.body.value === "string") {
+		const decoded: unknown = JSON.parse(result.body.value);
+		return isRecord(decoded) && "data" in decoded ? decoded.data : decoded;
+	}
+	return result;
 }
 
 export async function invokeStandardHook(
-	definition: StandardPluginDefinition,
-	hookName: string,
+	definition: SandboxedPlugin,
+	hookName: keyof NonNullable<SandboxedPlugin["hooks"]>,
 	event: unknown,
 	ctx: PluginContext,
 ) {
-	const hook = definition.hooks?.[hookName];
+	const hook = definition.hooks?.[hookName] as
+		| ((event: unknown, ctx: PluginContext) => unknown)
+		| { handler: (event: unknown, ctx: PluginContext) => unknown }
+		| undefined;
 	if (!hook) throw new Error(`Unknown hook ${hookName}`);
 	if (typeof hook === "function") {
 		return hook(event, ctx);

@@ -1,0 +1,71 @@
+{
+	"$schema": "./node_modules/@emdash-cms/plugin-cli/schemas/emdash-plugin.schema.json",
+	"slug": "simple-history",
+	"publisher": "did:plc:neov22wblqftd3653r6cl2gl",
+	"license": "MIT",
+	"author": {
+		"name": "Mason James",
+		"url": "https://masonjames.com/plugins/emdash-simple-history/"
+	},
+	"security": {
+		"email": "hi@masonjames.com",
+		"url": "https://masonjames.com/.well-known/security.txt"
+	},
+	"name": "Simple History",
+	"description": "Lightweight activity history for EmDash CMS content changes.",
+	"keywords": [
+		"history",
+		"audit",
+		"activity",
+		"content",
+		"emdash"
+	],
+	"repo": "https://github.com/masonjames/emdash-simple-history",
+	"release": {
+		"requires": {
+			"env:emdash": ">=1.0.1"
+		}
+	},
+	"capabilities": [
+		"content:read"
+	],
+	"allowedHosts": [],
+	"storage": {
+		"entries": {
+			"indexes": [
+				"timestamp",
+				"action",
+				"collection",
+				[
+					"collection",
+					"timestamp"
+				],
+				[
+					"action",
+					"timestamp"
+				]
+			]
+		}
+	},
+	"admin": {
+		"pages": [
+			{
+				"path": "/history",
+				"label": "History",
+				"icon": "history"
+			}
+		],
+		"widgets": [
+			{
+				"id": "recent-activity",
+				"title": "Recent Activity",
+				"size": "half"
+			}
+		]
+	},
+	"sections": {
+		"description": "Record content creates, updates, and deletions in a private admin history feed and dashboard widget. Filter activity and configure retention without editing your theme.",
+		"installation": "Install Simple History from the EmDash plugin registry. Your site must have a sandbox runner configured. Open Plugins > History to view activity and configure retention. No frontend companion is required.",
+		"faq": "Existing npm installations can keep using simpleHistoryPlugin() in astro.config.mjs. Choose either the npm registration or the registry install; do not activate both."
+	}
+}
